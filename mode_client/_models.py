@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import List, Optional, Dict, Literal, Union
+from typing import List, Dict, Literal, Union
 
 from pydantic import BaseModel
 
@@ -39,9 +39,9 @@ class Report(BaseModel):
     updated_at: str
     edited_at: str
     theme_id: int
-    color_mappings: str
-    last_successful_sync_at: Optional[str] = None
-    last_saved_at: Optional[str] = None
+    color_mappings: Dict
+    last_successful_sync_at: str
+    last_saved_at: str
     archived: bool
     account_id: int
     account_username: str
@@ -55,10 +55,10 @@ class Report(BaseModel):
     is_signed: bool
     shared: bool
     expected_runtime: float
-    last_successfully_run_at: Optional[str] = None
-    last_run_at: Optional[str] = None
+    last_successfully_run_at: str
+    last_run_at: str
     web_preview_image: str
-    last_successful_run_token: Optional[str] = None
+    last_successful_run_token: str
     query_count: str
     chart_count: str
     schedules_count: str
@@ -66,7 +66,6 @@ class Report(BaseModel):
     description: str
     space_token: str
     flamingo_signature: str
-    github_link: str
 
 
 class ReportRun(BaseModel):
