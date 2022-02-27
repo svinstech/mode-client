@@ -1,4 +1,4 @@
-from mode_analytics import __version__
+from mode_client import __version__
 
 
 def test_version():

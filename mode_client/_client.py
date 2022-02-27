@@ -8,7 +8,7 @@ import httpx
 from ._models import BatchQueries, Report, ReportRun
 
 
-class ApiClient:
+class ModeClient:
     def __init__(self,
                  workspace: str,
                  token: str,
