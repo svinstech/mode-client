@@ -70,12 +70,20 @@ class Report(BaseModel):
 
 class ReportRun(BaseModel):
     token: str
-    state: Literal['pending', 'enqueued', 'cancelled', 'failed', 'succeeded', 'completed', 'running_notebook']
+    state: Literal[
+        "pending",
+        "enqueued",
+        "cancelled",
+        "failed",
+        "succeeded",
+        "completed",
+        "running_notebook",
+    ]
     parameters: Dict[str, Any]
     created_at: Any
     updated_at: Any
     completed_at: Any
     purge_started_at: Any
     purge_completed_at: Any
-    python_state: Literal['none', 'pending', 'failed', 'submitted', 'succeeded']
+    python_state: Literal["none", "pending", "failed", "submitted", "succeeded"]
     form_fields: List[Any]
