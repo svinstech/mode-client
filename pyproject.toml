@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mode-client"
-version = "0.0.5"
+version = "0.0.6"
 description = "A typed Python client for the Mode Analytics APIs"
 authors = ["Kshitij Aranke <kshitij@aranke.org>"]
 

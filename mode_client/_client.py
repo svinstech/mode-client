@@ -27,12 +27,12 @@ class ModeClient:
             }
         }
 
-        r = self._request("POST", "/signature_tokens", json=data, api="batch")
+        r = self._request("POST", "signature_tokens", api="batch", json=data)
 
         bearer_token = b64encode(
             f"{r['token']}:{r['access_key']}:{r['access_secret']}".encode()
         ).decode()
-        self._header = {"Authorization": "Bearer " + bearer_token}
+        self._auth_header = {"Authorization": "Bearer " + bearer_token}
 
         self._signature_token_id = r["token"]
 
@@ -51,19 +51,27 @@ class ModeClient:
         self,
         method: str,
         resource: str,
+        api: Literal["api", "batch"] = "api",
         json: Optional[Dict] = None,
         params: Optional[Dict] = None,
-        api: Literal["api", "batch"] = "api",
     ) -> Any:
         url = f"https://app.mode.com/{api}/{self._workspace}/{resource}"
+
+        auth = None
+        if api == "api" or (api == "batch" and resource.startswith("signature_tokens")):
+            auth = self._auth
+
+        headers = None
+        if api == "batch" and not resource.startswith("signature_tokens"):
+            headers = self._auth_header
 
         r = httpx.request(
             method=method,
             url=url,
             json=json,
-            auth=self._auth,
+            auth=auth,
             params=params,
-            headers=self._header,
+            headers=headers,
         )
         r.raise_for_status()
         return r.json()
@@ -88,5 +96,5 @@ class ModeClient:
             params["include_spaces"] = include_spaces
 
         return BatchQueries.parse_obj(
-            self._request("GET", "queries", params=params, api="batch")
+            self._request("GET", "queries", api="batch", params=params)
         )
