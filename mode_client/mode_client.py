@@ -10,11 +10,13 @@ from .clients import (
 
 
 class ModeClient:
-    def __init__(self, workspace: str, token: str, password: str):
+    def __init__(
+        self, workspace: str, token: str, password: str, concurrent_connections: int = 5
+    ):
         session = aiohttp.ClientSession(
             base_url=f"https://app.mode.com",
             auth=aiohttp.BasicAuth(token, password),
-            connector=aiohttp.TCPConnector(limit_per_host=10),
+            connector=aiohttp.TCPConnector(limit=concurrent_connections),
         )
 
         self.collection = ModeCollectionClient(session, workspace)
