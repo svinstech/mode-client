@@ -1,13 +1,15 @@
 [tool.poetry]
 name = "mode-client"
-version = "0.0.6"
-description = "A typed Python client for the Mode Analytics APIs"
+version = "0.1.0"
+description = "An async and typed client for the Mode API"
 authors = ["Kshitij Aranke <kshitij@aranke.org>"]
+
+readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.7"
 pydantic = "^1.9"
-httpx = "^0.22.0"
+aiohttp = "^3.8"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.0"
