@@ -5,13 +5,6 @@ from pydantic import BaseModel, parse_obj_as
 from . import ModeBaseClient
 
 
-class Parameters(BaseModel):
-    status: List[str]
-    policy_status: List[str]
-    start_date: str
-    end_date: str
-
-
 class QueryRun(BaseModel):
     id: int
     token: str
@@ -24,7 +17,6 @@ class QueryRun(BaseModel):
     query_token: str
     query_name: str
     query_created_at: str
-    parameters: Parameters
     rendered_source: str
     max_result_bytes: int
 
