@@ -14,6 +14,7 @@ class ModeClient:
         session = aiohttp.ClientSession(
             base_url=f"https://app.mode.com",
             auth=aiohttp.BasicAuth(token, password),
+            connector=aiohttp.TCPConnector(limit=20),
         )
 
         self.collection = ModeCollectionClient(session, workspace)

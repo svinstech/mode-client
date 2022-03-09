@@ -26,6 +26,7 @@ class ModeQueryClient(ModeBaseClient):
 
     async def list(self, report: str) -> List[Query]:
         response = await self.request("GET", f"reports/{report}/queries")
+
         return parse_obj_as(List[Query], response["_embedded"]["queries"])
 
     async def create(
@@ -38,6 +39,7 @@ class ModeQueryClient(ModeBaseClient):
                 "name": name,
             }
         }
+
         return Query.parse_obj(
             await self.request("POST", f"reports/{report}/queries", json=json)
         )
@@ -52,6 +54,7 @@ class ModeQueryClient(ModeBaseClient):
                 "name": name,
             }
         }
+
         return Query.parse_obj(
             await self.request("PATCH", f"reports/{report}/queries/{query}", json=json)
         )

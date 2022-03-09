@@ -39,4 +39,5 @@ class ModeQueryRunClient(ModeBaseClient):
 
     async def list(self, report: str, run: str) -> List[QueryRun]:
         response = await self.request("GET", f"reports/{report}/runs/{run}/query_runs")
+
         return parse_obj_as(List[QueryRun], response["_embedded"]["query_runs"])

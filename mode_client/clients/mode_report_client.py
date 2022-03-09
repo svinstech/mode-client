@@ -58,6 +58,7 @@ class ModeReportClient(ModeBaseClient):
         response = await self.request(
             "GET", f"data_sources/{data_source}/reports", params=params
         )
+
         return parse_obj_as(List[Report], response["_embedded"]["reports"])
 
     async def list_for_space(
@@ -69,12 +70,14 @@ class ModeReportClient(ModeBaseClient):
     ) -> List[Report]:
         params = {"filter": _filter, "order": order, "order_by": order_by}
         response = await self.request("GET", f"spaces/{space}/reports", params=params)
+
         return parse_obj_as(List[Report], response["_embedded"]["reports"])
 
     async def update(
         self, report: str, name: str, description: str, space_token: str
     ) -> Report:
         json = {"name": name, "description": description, "space_token": space_token}
+
         return Report.parse_obj(
             await self.request("PATCH", f"reports/{report}", json=json)
         )
@@ -92,6 +95,7 @@ class ModeReportClient(ModeBaseClient):
             days=15
         ), "time cannot be within the past 15 days"
         json = {"time": time.isoformat()}
+
         await self.request("POST", "reports/purge", json=json)
 
     async def unarchive(self, report: str) -> Report:

@@ -26,14 +26,22 @@ class ModeCollectionClient(ModeBaseClient):
     async def list(self, filter_: Optional[Literal["all"]] = None) -> List[Collection]:
         params = {"filter": filter_}
         response = await self.request("GET", f"spaces", params=params)
-        return parse_obj_as(List[Collection], response["_embedded"]["spaces"])
+
+        spaces = response["_embedded"]["spaces"]
+
+        if not filter_:
+            spaces = [space for space in spaces if space["space_type"] != "private"]
+
+        return parse_obj_as(List[Collection], spaces)
 
     async def create(self, name: str, description: str) -> Collection:
         json = {"space": {"name": name, "description": description}}
+
         return Collection.parse_obj(await self.request("POST", f"spaces", json=json))
 
     async def update(self, space: str, name: str, description: str) -> Collection:
         json = {"space": {"name": name, "description": description}}
+
         return Collection.parse_obj(
             await self.request("POST", f"spaces/{space}", json=json)
         )

@@ -53,6 +53,7 @@ class ModeReportRunClient(ModeBaseClient):
         order_by: Literal["created_at", "updated_at"] = "updated_at",
     ) -> ReportRunList:
         params = {"filter": filter_, "order": order, "order_by": order_by}
+
         return ReportRunList.parse_obj(
             await self.request("GET", f"reports/{report}/runs", params=params)
         )
