@@ -32,7 +32,7 @@ class Report(BaseModel):
     expected_runtime: float
     last_successfully_run_at: Any
     last_run_at: Any
-    web_preview_image: str
+    web_preview_image: Optional[str]
     last_successful_run_token: str
     query_count: str
     chart_count: str
