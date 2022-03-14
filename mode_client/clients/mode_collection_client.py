@@ -20,12 +20,12 @@ class Collection(BaseModel):
 
 
 class ModeCollectionClient(ModeBaseClient):
-    async def get(self, space: str) -> Collection:
-        return Collection.parse_obj(await self.request("POST", f"spaces/{space}"))
+    def get(self, space: str) -> Collection:
+        return Collection.parse_obj(self.request("POST", f"/spaces/{space}"))
 
-    async def list(self, filter_: Optional[Literal["all"]] = None) -> List[Collection]:
+    def list(self, filter_: Optional[Literal["all"]] = None) -> List[Collection]:
         params = {"filter": filter_}
-        response = await self.request("GET", f"spaces", params=params)
+        response = self.request("GET", "/spaces", params=params)
 
         spaces = response["_embedded"]["spaces"]
 
@@ -34,17 +34,15 @@ class ModeCollectionClient(ModeBaseClient):
 
         return parse_obj_as(List[Collection], spaces)
 
-    async def create(self, name: str, description: str) -> Collection:
+    def create(self, name: str, description: str) -> Collection:
         json = {"space": {"name": name, "description": description}}
 
-        return Collection.parse_obj(await self.request("POST", f"spaces", json=json))
+        return Collection.parse_obj(self.request("POST", "/spaces", json=json))
 
-    async def update(self, space: str, name: str, description: str) -> Collection:
+    def update(self, space: str, name: str, description: str) -> Collection:
         json = {"space": {"name": name, "description": description}}
 
-        return Collection.parse_obj(
-            await self.request("POST", f"spaces/{space}", json=json)
-        )
+        return Collection.parse_obj(self.request("POST", f"/spaces/{space}", json=json))
 
-    async def delete(self, space: str):
-        return Collection.parse_obj(await self.request("DELETE", f"spaces/{space}"))
+    def delete(self, space: str):
+        return Collection.parse_obj(self.request("DELETE", f"/spaces/{space}"))

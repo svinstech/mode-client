@@ -22,14 +22,12 @@ class QueryRun(BaseModel):
 
 
 class ModeQueryRunClient(ModeBaseClient):
-    async def get(self, report: str, run: str, query_run: str) -> QueryRun:
+    def get(self, report: str, run: str, query_run: str) -> QueryRun:
         return QueryRun.parse_obj(
-            await self.request(
-                "GET", f"reports/{report}/runs/{run}/query_runs/{query_run}"
-            )
+            self.request("GET", f"/reports/{report}/runs/{run}/query_runs/{query_run}")
         )
 
-    async def list(self, report: str, run: str) -> List[QueryRun]:
-        response = await self.request("GET", f"reports/{report}/runs/{run}/query_runs")
+    def list(self, report: str, run: str) -> List[QueryRun]:
+        response = self.request("GET", f"/reports/{report}/runs/{run}/query_runs")
 
         return parse_obj_as(List[QueryRun], response["_embedded"]["query_runs"])

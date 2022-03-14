@@ -44,10 +44,10 @@ class Report(BaseModel):
 
 
 class ModeReportClient(ModeBaseClient):
-    async def get(self, report: str) -> Report:
-        return Report.parse_obj(await self.request("GET", f"reports/{report}"))
+    def get(self, report: str) -> Report:
+        return Report.parse_obj(self.request("GET", f"/reports/{report}"))
 
-    async def list_using_data_source(
+    def list_using_data_source(
         self,
         data_source: str,
         _filter: Optional[str] = None,
@@ -55,13 +55,13 @@ class ModeReportClient(ModeBaseClient):
         order_by: Literal["created_at", "updated_at"] = "updated_at",
     ) -> List[Report]:
         params = {"filter": _filter, "order": order, "order_by": order_by}
-        response = await self.request(
-            "GET", f"data_sources/{data_source}/reports", params=params
+        response = self.request(
+            "GET", f"/data_sources/{data_source}/reports", params=params
         )
 
         return parse_obj_as(List[Report], response["_embedded"]["reports"])
 
-    async def list_for_space(
+    def list_for_space(
         self,
         space: str,
         _filter: Optional[str] = None,
@@ -69,36 +69,30 @@ class ModeReportClient(ModeBaseClient):
         order_by: Literal["created_at", "updated_at"] = "updated_at",
     ) -> List[Report]:
         params = {"filter": _filter, "order": order, "order_by": order_by}
-        response = await self.request("GET", f"spaces/{space}/reports", params=params)
+        response = self.request("GET", f"/spaces/{space}/reports", params=params)
 
         return parse_obj_as(List[Report], response["_embedded"]["reports"])
 
-    async def update(
+    def update(
         self, report: str, name: str, description: str, space_token: str
     ) -> Report:
         json = {"name": name, "description": description, "space_token": space_token}
 
-        return Report.parse_obj(
-            await self.request("PATCH", f"reports/{report}", json=json)
-        )
+        return Report.parse_obj(self.request("PATCH", f"/reports/{report}", json=json))
 
-    async def delete(self, report: str) -> None:
-        await self.request("DELETE", f"reports/{report}", response_format="text")
+    def delete(self, report: str) -> None:
+        self.request("DELETE", f"/reports/{report}")
 
-    async def archive(self, report: str) -> Report:
-        return Report.parse_obj(
-            await self.request("PATCH", f"reports/{report}/archive")
-        )
+    def archive(self, report: str) -> Report:
+        return Report.parse_obj(self.request("PATCH", f"/reports/{report}/archive"))
 
-    async def purge(self, time: datetime.date) -> None:
+    def purge(self, time: datetime.date) -> None:
         assert time < datetime.date.today() - datetime.timedelta(
             days=15
         ), "time cannot be within the past 15 days"
         json = {"time": time.isoformat()}
 
-        await self.request("POST", "reports/purge", json=json)
+        self.request("POST", "/reports/purge", json=json)
 
-    async def unarchive(self, report: str) -> Report:
-        return Report.parse_obj(
-            await self.request("PATCH", f"reports/{report}/unarchive")
-        )
+    def unarchive(self, report: str) -> Report:
+        return Report.parse_obj(self.request("PATCH", f"/reports/{report}/unarchive"))

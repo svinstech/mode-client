@@ -19,17 +19,15 @@ class Query(BaseModel):
 
 
 class ModeQueryClient(ModeBaseClient):
-    async def get(self, report: str, query: str) -> Query:
-        return Query.parse_obj(
-            await self.request("GET", f"reports/{report}/queries/{query}")
-        )
+    def get(self, report: str, query: str) -> Query:
+        return Query.parse_obj(self.request("GET", f"/reports/{report}/queries/{query}"))
 
-    async def list(self, report: str) -> List[Query]:
-        response = await self.request("GET", f"reports/{report}/queries")
+    def list(self, report: str) -> List[Query]:
+        response = self.request("GET", f"/reports/{report}/queries")
 
         return parse_obj_as(List[Query], response["_embedded"]["queries"])
 
-    async def create(
+    def create(
         self, report: str, raw_query: str, data_source_id: int, name: str
     ) -> Query:
         json = {
@@ -41,10 +39,10 @@ class ModeQueryClient(ModeBaseClient):
         }
 
         return Query.parse_obj(
-            await self.request("POST", f"reports/{report}/queries", json=json)
+            self.request("POST", f"/reports/{report}/queries", json=json)
         )
 
-    async def update(
+    def update(
         self, report: str, query: str, raw_query: str, data_source_id: int, name: str
     ) -> Query:
         json = {
@@ -56,10 +54,10 @@ class ModeQueryClient(ModeBaseClient):
         }
 
         return Query.parse_obj(
-            await self.request("PATCH", f"reports/{report}/queries/{query}", json=json)
+            self.request("PATCH", f"/reports/{report}/queries/{query}", json=json)
         )
 
-    async def delete(self, report: str, query: str) -> Query:
+    def delete(self, report: str, query: str) -> Query:
         return Query.parse_obj(
-            await self.request("DELETE", f"reports/{report}/queries/{query}")
+            self.request("DELETE", f"/reports/{report}/queries/{query}")
         )

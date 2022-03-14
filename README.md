@@ -1,10 +1,10 @@
 # mode-client
 
-`mode-client` is an async and typed client for interaction with the [Mode API](https://mode.com/developer/api-reference/introduction/).
+`mode-client` is a typed client for interaction with the [Mode API](https://mode.com/developer/api-reference/introduction/).
 
 ## Installation
 
-`mode-client` requires Python version 3.7 or higher for `async`/`await` and `typing`.
+`mode-client` requires Python version 3.7 or higher for `typing`.
 
 ```shell
 pip install mode-client
@@ -13,17 +13,10 @@ pip install mode-client
 ## Usage
 
 ```python
-import asyncio
+import mode_client
 
-from mode_client import ModeClient
-
-
-async def main():
-    async with ModeClient('workspace', 'token', 'password') as client:
-        return await client.collection.list()
-
-collections = asyncio.run(main())
-print(collections)
+client = mode_client.ModeClient("workspace", "token", "password")
+print(client.collection.list())
 ```
 
 ## Objects
@@ -41,15 +34,6 @@ The objects currently implemented are:
 If you'd like to see an object implemented, please [create a new Github issue](https://github.com/k-aranke/mode-client/issues/new).
 
 ## FAQ
-
-### Why is `mode-client` async?
-
-`mode-client` is async to allow fetching multiple objects in parallel (e.g. all reports in a given collection).
-This is especially important for time-constrained environments like AWS Lambda.
-
-### Can I run `mode-client` synchronously?
-
-Not directly, but you can wrap your async function in `asyncio.run` as shown in the `Usage` section earlier.
 
 ### Why are `mode-client` objects typed?
 

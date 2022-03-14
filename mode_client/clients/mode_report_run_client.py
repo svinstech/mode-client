@@ -40,12 +40,10 @@ class ReportRunList(BaseModel):
 
 
 class ModeReportRunClient(ModeBaseClient):
-    async def get(self, report: str, run: str) -> ReportRun:
-        return ReportRun.parse_obj(
-            await self.request("GET", f"reports/{report}/runs/{run}")
-        )
+    def get(self, report: str, run: str) -> ReportRun:
+        return ReportRun.parse_obj(self.request("GET", f"/reports/{report}/runs/{run}"))
 
-    async def list(
+    def list(
         self,
         report: str,
         filter_: Optional[str] = None,
@@ -55,15 +53,15 @@ class ModeReportRunClient(ModeBaseClient):
         params = {"filter": filter_, "order": order, "order_by": order_by}
 
         return ReportRunList.parse_obj(
-            await self.request("GET", f"reports/{report}/runs", params=params)
+            self.request("GET", f"/reports/{report}/runs", params=params)
         )
 
-    async def clone(self, report: str, run: str) -> ReportRun:
+    def clone(self, report: str, run: str) -> ReportRun:
         return ReportRun.parse_obj(
-            await self.request("POST", f"reports/{report}/runs/{run}/clone")
+            self.request("POST", f"/reports/{report}/runs/{run}/clone")
         )
 
-    async def create(self, report: str, json: Dict[str, Any]) -> ReportRun:
+    def create(self, report: str, json: Dict[str, Any]) -> ReportRun:
         return ReportRun.parse_obj(
-            await self.request("POST", f"reports/{report}/runs", json=json)
+            self.request("POST", f"/reports/{report}/runs", json=json)
         )

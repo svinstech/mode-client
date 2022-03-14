@@ -1,4 +1,4 @@
-import aiohttp
+import httpx
 
 from .clients import (
     ModeCollectionClient,
@@ -10,28 +10,25 @@ from .clients import (
 
 
 class ModeClient:
-    def __init__(
-        self, workspace: str, token: str, password: str, concurrent_connections: int = 5
-    ):
-        session = aiohttp.ClientSession(
-            base_url=f"https://app.mode.com",
-            auth=aiohttp.BasicAuth(token, password),
-            connector=aiohttp.TCPConnector(limit=concurrent_connections),
+    def __init__(self, workspace: str, token: str, password: str):
+        client = httpx.Client(
+            base_url=f"https://app.mode.com/api/{workspace}",
+            auth=httpx.BasicAuth(token, password),
         )
 
-        self.collection = ModeCollectionClient(session, workspace)
-        self.query = ModeQueryClient(session, workspace)
-        self.query_run = ModeQueryRunClient(session, workspace)
-        self.report = ModeReportClient(session, workspace)
-        self.report_run = ModeReportRunClient(session, workspace)
+        self.collection = ModeCollectionClient(client)
+        self.query = ModeQueryClient(client)
+        self.query_run = ModeQueryRunClient(client)
+        self.report = ModeReportClient(client)
+        self.report_run = ModeReportRunClient(client)
 
-        self._session = session
+        self._client = client
 
-    async def __aenter__(self):
+    def __enter__(self):
         return self
 
-    async def _close(self):
-        await self._session.close()
+    def close(self):
+        self._client.close()
 
-    async def __aexit__(self, exc_type, exc_val, exc_tb):
-        await self._close()
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.close()
