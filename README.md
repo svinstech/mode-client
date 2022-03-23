@@ -4,7 +4,7 @@
 
 ## Installation
 
-`mode-client` requires Python version 3.7 or higher for `typing`.
+`mode-client` requires Python version 3.7 or higher.
 
 ```shell
 pip install mode-client
@@ -23,24 +23,20 @@ print(client.collection.list())
 
 The objects currently implemented are:
 
-| Object                                                                           | Methods                                                                                                |
-|----------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------|
-| [`collection`](https://mode.com/developer/api-reference/management/collections/) | `get`, `list`, `create`, `update`, `delete`                                                            |
-| [`report`](https://mode.com/developer/api-reference/analytics/reports/)          | `get`, `list_using_data_source`, `list_for_space`, `update`, `delete`, `archive`, `purge`, `unarchive` |
-| [`report_run`](https://mode.com/developer/api-reference/analytics/report-runs/)  | `get`, `list`, `clone`, `create`                                                                       |
-| [`query`](https://mode.com/developer/api-reference/analytics/queries/)           | `get`, `list`, `create`, `update`, `delete`                                                            |
-| [`query_run`](https://mode.com/developer/api-reference/analytics/query-runs/)    | `get`, `list`                                                                                          |
-
-If you'd like to see an object implemented, please [create a new Github issue](https://github.com/k-aranke/mode-client/issues/new).
+| Object                                                                           | Methods                                                                    |
+|----------------------------------------------------------------------------------|----------------------------------------------------------------------------|
+| [`collection`](https://mode.com/developer/api-reference/management/collections/) | `get`, `list`, `create`, `update`, `delete`                                |
+| [`report`](https://mode.com/developer/api-reference/analytics/reports/)          | `get`, `list`, `update`, `delete`, `archive`, `purge`, `unarchive`, `sync` |
+| [`report_run`](https://mode.com/developer/api-reference/analytics/report-runs/)  | `get`, `list`, `clone`, `create`                                           |
+| [`query`](https://mode.com/developer/api-reference/analytics/queries/)           | `get`, `list`, `create`, `update`, `delete`                                |
+| [`query_run`](https://mode.com/developer/api-reference/analytics/query-runs/)    | `get`, `list`                                                              |
 
 ## FAQ
 
-### Why are `mode-client` objects typed?
+### What validation does `mode-client` perform?
 
-`mode-client` is typed to validate data coming from the Mode API.
-Typing objects also makes selecting attributes easier since they can be recognized from a list instead of recalled from memory. 
+`mode-client` uses [Pydantic](https://pydantic-docs.helpmanual.io) data types to validate the data returned from the Mode API.
 
-### I don't see a `_links` attribute in the types?
+### Why isn't `mode-client` asynchronous?
 
-`_links` often duplicate information in the rest of the object and their presence makes it difficult to take in the object at a glance.
-Therefore, `_links` have been excluded from `mode-client`, but [create a new Github issue](https://github.com/k-aranke/mode-client/issues/new) if you'd like to see them here.
+The Mode API throttles more than a single concurrent connection so the overhead of `async`/`await` isn't worth it.

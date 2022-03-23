@@ -18,7 +18,9 @@ class ModeBaseClient:
         if params:
             params = {k: v for k, v in params.items() if v}
 
-        response = self.client.request(method=method, url=resource, json=json, params=params)
+        response = self.client.request(
+            method=method, url=resource, json=json, params=params
+        )
         response.raise_for_status()
 
         try:

@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Any, Dict, Optional, Literal, List
 
 from pydantic import BaseModel
@@ -17,11 +18,11 @@ class ReportRun(BaseModel):
         "running_notebook",
     ]
     parameters: Dict[str, Any]
-    created_at: Any
-    updated_at: Any
-    completed_at: Any
-    purge_started_at: Any
-    purge_completed_at: Any
+    created_at: datetime
+    updated_at: datetime
+    completed_at: Optional[datetime]
+    purge_started_at: Optional[datetime]
+    purge_completed_at: Optional[datetime]
     python_state: Literal["none", "pending", "failed", "submitted", "succeeded"]
     form_fields: List[Any]
 

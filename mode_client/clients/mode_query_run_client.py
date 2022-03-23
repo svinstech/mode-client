@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import List
 
 from pydantic import BaseModel, parse_obj_as
@@ -10,13 +11,13 @@ class QueryRun(BaseModel):
     token: str
     raw_source: str
     state: str
-    created_at: str
-    completed_at: str
+    created_at: datetime
+    completed_at: datetime
     data_source_id: int
     limit: bool
     query_token: str
     query_name: str
-    query_created_at: str
+    query_created_at: datetime
     rendered_source: str
     max_result_bytes: int
 

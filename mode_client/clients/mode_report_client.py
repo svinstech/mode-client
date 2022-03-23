@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime, timedelta, date
 from typing import Any, Dict, Optional, Literal, List
 
 from pydantic import BaseModel, parse_obj_as
@@ -10,13 +10,13 @@ class Report(BaseModel):
     token: str
     id: int
     name: str
-    created_at: Any
-    updated_at: Any
-    edited_at: Any
+    created_at: datetime
+    updated_at: datetime
+    edited_at: datetime
     theme_id: int
     color_mappings: Dict[str, Any]
-    last_successful_sync_at: Any
-    last_saved_at: Any
+    last_successful_sync_at: Optional[datetime]
+    last_saved_at: Optional[datetime]
     archived: bool
     account_id: int
     account_username: str
@@ -30,8 +30,8 @@ class Report(BaseModel):
     is_signed: bool
     shared: bool
     expected_runtime: float
-    last_successfully_run_at: Any
-    last_run_at: Any
+    last_successfully_run_at: Optional[datetime]
+    last_run_at: Optional[datetime]
     web_preview_image: Optional[str]
     last_successful_run_token: str
     query_count: str
@@ -47,29 +47,26 @@ class ModeReportClient(ModeBaseClient):
     def get(self, report: str) -> Report:
         return Report.parse_obj(self.request("GET", f"/reports/{report}"))
 
-    def list_using_data_source(
+    def list(
         self,
-        data_source: str,
+        data_source: Optional[str] = None,
+        space: Optional[str] = None,
         _filter: Optional[str] = None,
         order: Literal["asc", "desc"] = "desc",
         order_by: Literal["created_at", "updated_at"] = "updated_at",
     ) -> List[Report]:
-        params = {"filter": _filter, "order": order, "order_by": order_by}
-        response = self.request(
-            "GET", f"/data_sources/{data_source}/reports", params=params
+        assert (
+            bool(data_source) + bool(space) == 1
+        ), "Only one of data_source, space can be defined"
+
+        url = (
+            f"/spaces/{space}/reports"
+            if space
+            else f"/data_sources/{data_source}/reports"
         )
 
-        return parse_obj_as(List[Report], response["_embedded"]["reports"])
-
-    def list_for_space(
-        self,
-        space: str,
-        _filter: Optional[str] = None,
-        order: Literal["asc", "desc"] = "desc",
-        order_by: Literal["created_at", "updated_at"] = "updated_at",
-    ) -> List[Report]:
         params = {"filter": _filter, "order": order, "order_by": order_by}
-        response = self.request("GET", f"/spaces/{space}/reports", params=params)
+        response = self.request("GET", url, params=params)
 
         return parse_obj_as(List[Report], response["_embedded"]["reports"])
 
@@ -86,13 +83,20 @@ class ModeReportClient(ModeBaseClient):
     def archive(self, report: str) -> Report:
         return Report.parse_obj(self.request("PATCH", f"/reports/{report}/archive"))
 
-    def purge(self, time: datetime.date) -> None:
-        assert time < datetime.date.today() - datetime.timedelta(
+    def purge(self, purge_date: date) -> None:
+        assert purge_date < date.today() - timedelta(
             days=15
         ), "time cannot be within the past 15 days"
-        json = {"time": time.isoformat()}
+        json = {"time": purge_date.isoformat()}
 
         self.request("POST", "/reports/purge", json=json)
 
     def unarchive(self, report: str) -> Report:
         return Report.parse_obj(self.request("PATCH", f"/reports/{report}/unarchive"))
+
+    def sync(self, report: str, commit_message: Optional[str] = None) -> Report:
+        json = {"commit_message": commit_message}
+
+        return Report.parse_obj(
+            self.request("PATCH", f"/reports/{report}/sync_to_github", json=json)
+        )

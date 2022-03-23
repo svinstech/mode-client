@@ -14,6 +14,7 @@ class ModeClient:
         client = httpx.Client(
             base_url=f"https://app.mode.com/api/{workspace}",
             auth=httpx.BasicAuth(token, password),
+            timeout=10.0,
         )
 
         self.collection = ModeCollectionClient(client)

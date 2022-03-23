@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import List
 
 from pydantic import BaseModel, parse_obj_as
@@ -9,8 +10,8 @@ class Query(BaseModel):
     id: int
     token: str
     raw_query: str
-    created_at: str
-    updated_at: str
+    created_at: datetime
+    updated_at: datetime
     name: str
     last_run_id: int
     data_source_id: int
@@ -20,7 +21,9 @@ class Query(BaseModel):
 
 class ModeQueryClient(ModeBaseClient):
     def get(self, report: str, query: str) -> Query:
-        return Query.parse_obj(self.request("GET", f"/reports/{report}/queries/{query}"))
+        return Query.parse_obj(
+            self.request("GET", f"/reports/{report}/queries/{query}")
+        )
 
     def list(self, report: str) -> List[Query]:
         response = self.request("GET", f"/reports/{report}/queries")
