@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mode-client"
-version = "0.3.0"
+version = "0.4.0"
 description = "A typed client for the Mode API"
 authors = ["Kshitij Aranke <kshitij@aranke.org>"]
 
@@ -9,10 +9,10 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.7"
 pydantic = "^1.9"
-httpx = "^0.22"
+httpx = "^0.23"
 
 [tool.poetry.dev-dependencies]
-pytest = "^7.0"
+pytest = "^7.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
