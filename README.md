@@ -42,6 +42,8 @@ The following objects and methods are implemented:
 | [query](https://mode.com/developer/api-reference/analytics/queries/)                          | get(report, query) -> Query<br/>list(report) -> List[Query]<br/>create(report, raw_query, data_source_id, name)<br/>update(report, query, [raw_query], [data_source_id], [name]) -> Query<br/>delete(report, query)                                   |
 | [query_run](https://mode.com/developer/api-reference/analytics/query-runs/)                   | get(report, run, query_run) -> QueryRun<br/>list(report, run) -> List[QueryRun]                                                                                                                                                                       |
 
+If there's a particular object or method you'd like to see, please open a [feature request](https://github.com/k-aranke/mode-client/issues/new?assignees=&labels=&template=feature_request.md&title=).
+
 ## FAQ
 
 ### How do I find my workspace, token and password?
@@ -53,7 +55,7 @@ To obtain a Mode token and password, follow the instructions [here](https://mode
 ### Does *mode-client* support the full Mode API?
 
 No, *mode-client* supports a subset of the Mode API most commonly used for auditing Mode workspaces.
-If you'd like to see an object or method supported, please file a [GitHub issue](https://github.com/k-aranke/mode-client/issues/new).
+If you'd like to see an object or method supported, please open a [feature request](https://github.com/k-aranke/mode-client/issues/new?assignees=&labels=&template=feature_request.md&title=).
 
 ### I'm getting a 429 error. What do I do?
 
