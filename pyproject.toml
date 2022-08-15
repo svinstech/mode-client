@@ -4,6 +4,12 @@ version = "0.4.0"
 description = "A typed Python client for the Mode API"
 authors = ["Kshitij Aranke <kshitij@aranke.org>"]
 readme = "README.md"
+license = "MIT"
+homepage = "https://github.com/k-aranke/mode-client"
+repository = "https://github.com/k-aranke/mode-client"
+
+[tool.poetry.urls]
+Changelog = "https://github.com/k-aranke/mode-client/releases"
 
 [tool.poetry.dependencies]
 python = "^3.8"

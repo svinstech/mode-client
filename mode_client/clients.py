@@ -120,26 +120,9 @@ class ModeReportClient(ModeBaseClient):
 
         return Report.parse_obj(response)
 
-    def list(
-        self,
-        data_source: Optional[str] = None,
-        space: Optional[str] = None,
-        _filter: Optional[str] = None,
-        order: Literal["asc", "desc"] = "desc",
-        order_by: Literal["created_at", "updated_at"] = "updated_at",
-    ) -> List[Report]:
-        assert (
-            bool(data_source) + bool(space) == 1
-        ), "Only one of data_source, space can be defined"
-
-        url = (
-            f"/spaces/{space}/reports"
-            if space
-            else f"/data_sources/{data_source}/reports"
-        )
-
-        params = {"filter": _filter, "order": order, "order_by": order_by}
-        response = self.request("GET", url, params=params)
+    def list(self, space: str) -> List[Report]:
+        params = {"order": "desc", "order_by": "updated_at"}
+        response = self.request("GET", f"/spaces/{space}/reports", params=params)
 
         return parse_obj_as(List[Report], response["_embedded"]["reports"])
 
@@ -160,7 +143,7 @@ class ModeReportClient(ModeBaseClient):
 
         return Report.parse_obj(response)
 
-    def delete(self, report: str) -> None:
+    def delete(self, report: str):
         self.request("DELETE", f"/reports/{report}")
 
     def archive(self, report: str) -> Report:
@@ -185,14 +168,8 @@ class ModeReportRunClient(ModeBaseClient):
 
         return ReportRun.parse_obj(response)
 
-    def list(
-        self,
-        report: str,
-        filter_: Optional[str] = None,
-        order: Literal["asc", "desc"] = "desc",
-        order_by: Literal["created_at", "updated_at"] = "updated_at",
-    ) -> ReportRuns:
-        params = {"filter": filter_, "order": order, "order_by": order_by}
+    def list(self, report: str) -> ReportRuns:
+        params = {"order": "desc", "order_by": "updated_at"}
         raw_response = self.request("GET", f"/reports/{report}/runs", params=params)
         response = {
             "pagination": raw_response["pagination"],
@@ -205,8 +182,10 @@ class ModeReportRunClient(ModeBaseClient):
         response = self.request("POST", f"/reports/{report}/runs/{run}/clone")
         return ReportRun.parse_obj(response)
 
-    def create(self, report: str, json: Dict[str, Any]) -> ReportRun:
-        response = self.request("POST", f"/reports/{report}/runs", json=json)
+    def create(self, report: str, parameters: Dict[str, Any]) -> ReportRun:
+        response = self.request(
+            "POST", f"/reports/{report}/runs", json={"parameters": parameters}
+        )
         return ReportRun.parse_obj(response)
 
 
@@ -238,9 +217,7 @@ class ModeSpaceClient(ModeBaseClient):
         return Space.parse_obj(response)
 
     def delete(self, space: str):
-        response = self.request("DELETE", f"/spaces/{space}")
-
-        return Space.parse_obj(response)
+        self.request("DELETE", f"/spaces/{space}")
 
 
 class ModeClient:
