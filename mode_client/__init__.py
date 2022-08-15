@@ -1,3 +1,1 @@
-__version__ = "0.4.0"
-
-from .mode_client import ModeClient
+from .clients import ModeClient  # noqa: F401
