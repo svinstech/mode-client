@@ -68,7 +68,7 @@ def test_report_get(client, report_id):
     assert report.type == "Report"
     assert report.account_username == "mode_client"
     assert report.chart_count == 2
-    assert report.query_count == 2
+    assert report.query_count == 1
     assert report.archived is False
     assert report.links.creator.href == "/api/kshitij_aranke"
 
