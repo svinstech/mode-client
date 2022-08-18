@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mode-client"
-version = "1.1.1"
+version = "1.1.2"
 description = "A typed Python client for the Mode API"
 authors = ["Kshitij Aranke <kshitij@aranke.org>"]
 readme = "README.md"
@@ -25,7 +25,7 @@ mypy = "^0.971"
 
 [tool.commitizen]
 name = "cz_conventional_commits"
-version = "1.1.1"
+version = "1.1.2"
 version_files = ["pyproject.toml:version"]
 
 [build-system]
