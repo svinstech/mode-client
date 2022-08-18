@@ -299,7 +299,7 @@ class ReportRun(BaseModel):
     purge_started_at: Optional[str]
     purge_completed_at: Optional[str]
     python_state: Optional[
-        Literal["none", "pending", "failed", "submitted", "succeeded"]
+        Literal["none", "pending", "failed", "submitted", "succeeded", "skipped"]
     ]
     form_fields: Optional[list]
     flamingo_signature: str
