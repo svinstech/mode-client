@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from json import JSONDecodeError
 from typing import Any, Dict, List, Literal, Optional
 
@@ -27,8 +29,8 @@ class ModeBaseClient:
         self,
         method: str,
         resource: str,
-        json: Optional[Dict] = None,
-        params: Optional[Dict] = None,
+        json: Optional[Dict[str, Any]] = None,
+        params: Optional[Dict[str, Any]] = None,
     ) -> Any:
         if params:
             params = {k: v for k, v in params.items() if v}
@@ -65,7 +67,9 @@ class ModeQueryClient(ModeBaseClient):
 
         return parse_obj_as(List[Query], response["_embedded"]["queries"])
 
-    def create(self, report: str, raw_query: str, data_source_id: int, name: str):
+    def create(
+        self, report: str, raw_query: str, data_source_id: int, name: str
+    ) -> None:
         json = {
             "query": {
                 "raw_query": raw_query,
@@ -96,7 +100,7 @@ class ModeQueryClient(ModeBaseClient):
 
         return Query.parse_obj(response)
 
-    def delete(self, report: str, query: str):
+    def delete(self, report: str, query: str) -> None:
         self.request("DELETE", f"/reports/{report}/queries/{query}")
 
 
@@ -143,7 +147,7 @@ class ModeReportClient(ModeBaseClient):
 
         return Report.parse_obj(response)
 
-    def delete(self, report: str):
+    def delete(self, report: str) -> None:
         self.request("DELETE", f"/reports/{report}")
 
     def archive(self, report: str) -> Report:
@@ -216,7 +220,7 @@ class ModeSpaceClient(ModeBaseClient):
 
         return Space.parse_obj(response)
 
-    def delete(self, space: str):
+    def delete(self, space: str) -> None:
         self.request("DELETE", f"/spaces/{space}")
 
 
@@ -227,25 +231,25 @@ class ModeClient:
         self.password = password
 
     @property
-    def account(self):
+    def account(self) -> ModeAccountClient:
         return ModeAccountClient(self.workspace, self.token, self.password)
 
     @property
-    def query(self):
+    def query(self) -> ModeQueryClient:
         return ModeQueryClient(self.workspace, self.token, self.password)
 
     @property
-    def query_run(self):
+    def query_run(self) -> ModeQueryRunClient:
         return ModeQueryRunClient(self.workspace, self.token, self.password)
 
     @property
-    def report(self):
+    def report(self) -> ModeReportClient:
         return ModeReportClient(self.workspace, self.token, self.password)
 
     @property
-    def report_run(self):
+    def report_run(self) -> ModeReportRunClient:
         return ModeReportRunClient(self.workspace, self.token, self.password)
 
     @property
-    def space(self):
+    def space(self) -> ModeSpaceClient:
         return ModeSpaceClient(self.workspace, self.token, self.password)
