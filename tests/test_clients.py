@@ -1,15 +1,9 @@
 import os
-import time
 
 import pytest
 from dotenv import load_dotenv
 
 from mode_client import ModeClient
-
-
-@pytest.fixture(autouse=True)
-def throttle():
-    time.sleep(3)
 
 
 @pytest.fixture
@@ -120,32 +114,6 @@ def test_query_get(client, report_id, query_id):
     query = client.query.get(report_id, query_id)
     assert query.name == "Query 1"
     assert query.raw_query.startswith("-- Returns first 100 rows")
-
-
-def test_query_create(client, report_id):
-    client.query.create(
-        report_id, "SELECT * FROM tutorial.flights limit 100;", 1, "flights"
-    )
-
-    queries = client.query.list(report_id)
-    assert set(q.name for q in queries) == {"Query 1", "Query 2", "flights"}
-
-    query = [q for q in queries if q.name == "flights"][0]
-    assert query.raw_query == "SELECT * FROM tutorial.flights limit 100;"
-    assert query.name == "flights"
-
-    query = client.query.update(
-        report_id,
-        query.token,
-        raw_query="SELECT * FROM tutorial.flights limit 10;",
-        name="flights2",
-    )
-    assert query.raw_query == "SELECT * FROM tutorial.flights limit 10;"
-    assert query.name == "flights2"
-
-    client.query.delete(report_id, query.token)
-    queries = client.query.list(report_id)
-    assert set(q.name for q in queries) == {"Query 1", "Query 2"}
 
 
 def test_query_run(client, report_id):
