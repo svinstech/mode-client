@@ -1,3 +1,9 @@
+## 1.2.3 (2022-08-23)
+
+### Fix
+
+- make query run parameters type Dict[str, Any]
+
 ## 1.2.2 (2022-08-23)
 
 ### Fix
