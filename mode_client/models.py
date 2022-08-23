@@ -220,7 +220,7 @@ class QueryRun(BaseModel):
     query_token: str
     query_name: str
     query_created_at: str
-    parameters: Dict[str, str]
+    parameters: Dict[str, Any]
     rendered_source: Optional[str]
     max_result_bytes: str
     help_url: Optional[str]
