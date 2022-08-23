@@ -5,7 +5,7 @@ from pydantic import BaseModel, Field
 
 class Link(BaseModel):
     href: str
-    templated: Optional[bool] = False
+    templated: Optional[bool]
 
 
 class Avatar(BaseModel):
