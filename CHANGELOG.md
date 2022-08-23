@@ -1,3 +1,9 @@
+## 1.2.2 (2022-08-23)
+
+### Fix
+
+- hopefully make link hashable
+
 ## 1.2.1 (2022-08-22)
 
 ### Fix
