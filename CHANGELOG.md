@@ -1,3 +1,9 @@
+## 1.2.4 (2022-08-31)
+
+### Fix
+
+- make flamingo signature optional (#16)
+
 ## 1.2.3 (2022-08-23)
 
 ### Fix
