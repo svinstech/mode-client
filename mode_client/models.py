@@ -296,7 +296,7 @@ class ReportRun(BaseModel):
         Literal["none", "pending", "failed", "submitted", "succeeded", "skipped"]
     ]
     form_fields: Optional[List[Any]]
-    flamingo_signature: str
+    flamingo_signature: Optional[str]
     flamingo_host: Optional[str]
     is_latest_report_run: Optional[bool]
     is_latest_successful_report_run: Optional[bool]
