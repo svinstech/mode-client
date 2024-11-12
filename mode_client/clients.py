@@ -240,22 +240,6 @@ class ModeDefinitionClient(ModeBaseClient):
 
         return parse_obj_as(List[Definition], definitions)
 
-    def create(self, data: Dict[str, Any]) -> Definition:
-        response = self.request("POST", "/definitions", json={"definition": data})
-
-        return Definition.parse_obj(response)
-
-    def update(self, definition_token: str, data: Dict[str, Any]) -> Definition:
-        data = {k: v for k, v in data.items() if v is not None}
-        response = self.request(
-            "POST", f"/definitions/{definition_token}", json={"definition": data}
-        )
-
-        return Definition.parse_obj(response)
-
-    def delete(self, definition_token: str) -> None:
-        self.request("DELETE", f"definitions/{definition_token}")
-
     def sync(
         self, definition_token: str, commit_message: Optional[str] = None
     ) -> Definition:
