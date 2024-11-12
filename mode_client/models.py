@@ -109,6 +109,14 @@ class SpaceLinks(BaseModel):
     viewed: Optional[Link]
 
 
+class DefinitionLinks(BaseModel):
+    self: Link
+    creator: Link
+    last_run: Link
+    last_successful_github_sync: Link
+    web_edit: Link
+
+
 class AccountLinks(BaseModel):
     self: Link
     web: Link
@@ -322,6 +330,21 @@ class Space(BaseModel):
     viewed_: Optional[str] = Field(None, alias="viewed?")
     default_access_level: Optional[str]
     links: SpaceLinks = Field(alias="_links")
+
+
+class Definition(BaseModel):
+    token: str
+    id: int
+    name: str
+    description: str
+    source: str
+    data_source_id: str
+    created_at: str
+    updated_at: str
+    last_successful_sync_at: str
+    last_saved_at: str
+    github_link: Optional[str]
+    links: DefinitionLinks = Field(alias="_links")
 
 
 class Account(BaseModel):
