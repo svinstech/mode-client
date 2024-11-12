@@ -14,6 +14,7 @@ from mode_client.models import (
     ReportRun,
     ReportRuns,
     Space,
+    Definition,
 )
 
 
@@ -224,6 +225,32 @@ class ModeSpaceClient(ModeBaseClient):
         self.request("DELETE", f"/spaces/{space}")
 
 
+class ModeDefinitionClient(ModeBaseClient):
+    def get(self, definition_token: str) -> Definition:
+        response = self.request("GET", f"/definitions/{definition_token}")
+
+        return Definition.parse_obj(response)
+
+    def list(
+        self, filter_: Optional[str] = None, tokens: Optional[List[str]] = None
+    ) -> List[Definition]:
+        params = {"filter": filter_, "tokens": tokens}
+        response = self.request("GET", "/definitions", params=params)
+        definitions = response["_embedded"]["definitions"]
+
+        return parse_obj_as(List[Definition], definitions)
+
+    def sync(
+        self, definition_token: str, commit_message: Optional[str] = None
+    ) -> Definition:
+        json = {"commit_message": commit_message}
+        response = self.request(
+            "PATCH", f"/definitions/{definition_token}/sync_to_github", json=json
+        )
+
+        return Definition.parse_obj(response)
+
+
 class ModeClient:
     def __init__(self, workspace: str, token: str, password: str):
         self.workspace = workspace
@@ -253,3 +280,7 @@ class ModeClient:
     @property
     def space(self) -> ModeSpaceClient:
         return ModeSpaceClient(self.workspace, self.token, self.password)
+
+    @property
+    def definition(self) -> ModeDefinitionClient:
+        return ModeDefinitionClient(self.workspace, self.token, self.password)
