@@ -231,7 +231,9 @@ class ModeDefinitionClient(ModeBaseClient):
 
         return Definition.parse_obj(response)
 
-    def list(self, filter_: Optional[str] = None, tokens: Optional[List[str]] = None) -> List[Definition]:
+    def list(
+        self, filter_: Optional[str] = None, tokens: Optional[List[str]] = None
+    ) -> List[Definition]:
         params = {"filter": filter_, "tokens": tokens}
         response = self.request("GET", "/definitions", params=params)
         definitions = response["_embedded"]["definitions"]
@@ -243,20 +245,24 @@ class ModeDefinitionClient(ModeBaseClient):
 
         return Definition.parse_obj(response)
 
-    def update(
-        self, definition_token: str, data: Dict[str, Any]
-    ) -> Definition:
+    def update(self, definition_token: str, data: Dict[str, Any]) -> Definition:
         data = {k: v for k, v in data.items() if v is not None}
-        response = self.request("POST", f"/definitions/{definition_token}", json={"definition": data})
+        response = self.request(
+            "POST", f"/definitions/{definition_token}", json={"definition": data}
+        )
 
         return Definition.parse_obj(response)
 
     def delete(self, definition_token: str) -> None:
         self.request("DELETE", f"definitions/{definition_token}")
 
-    def sync(self, definition_token: str, commit_message: Optional[str] = None) -> Definition:
+    def sync(
+        self, definition_token: str, commit_message: Optional[str] = None
+    ) -> Definition:
         json = {"commit_message": commit_message}
-        response = self.request("PATCH", f"/definitions/{definition_token}/sync_to_github", json=json)
+        response = self.request(
+            "PATCH", f"/definitions/{definition_token}/sync_to_github", json=json
+        )
 
         return Definition.parse_obj(response)
 
@@ -290,8 +296,7 @@ class ModeClient:
     @property
     def space(self) -> ModeSpaceClient:
         return ModeSpaceClient(self.workspace, self.token, self.password)
-    
+
     @property
     def definition(self) -> ModeDefinitionClient:
         return ModeDefinitionClient(self.workspace, self.token, self.password)
-
