@@ -41,7 +41,7 @@ class QueryRunLinks(BaseModel):
     query_web: Link
     report_run: Link
     report_run_web: Link
-    executed_by: Link
+    executed_by: Optional[Link]
 
 
 class ReportLinks(BaseModel):
