@@ -20,10 +20,11 @@ from mode_client.models import (
 
 class ModeBaseClient:
     def __init__(self, workspace: str, token: str, password: str):
+        timeout = httpx.Timeout(10.0, read=None)
         self.client = httpx.Client(
             base_url=f"https://app.mode.com/api/{workspace}",
             auth=httpx.BasicAuth(token, password),
-            timeout=10.0,
+            timeout=timeout,
         )
 
     def request(
