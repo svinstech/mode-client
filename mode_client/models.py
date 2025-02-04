@@ -112,7 +112,7 @@ class SpaceLinks(BaseModel):
 class DefinitionLinks(BaseModel):
     self: Link
     creator: Link
-    last_run: Link
+    last_run: Optional[Link]
     last_successful_github_sync: Link
     web_edit: Link
 
