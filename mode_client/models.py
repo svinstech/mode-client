@@ -277,7 +277,7 @@ class Report(BaseModel):
     chart_count: Optional[int]
     runs_count: int
     schedules_count: Optional[int]
-    query_preview: str
+    query_preview: Optional[str]
     view_count: int
     links: ReportLinks = Field(alias="_links")
 
