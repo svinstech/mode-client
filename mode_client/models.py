@@ -113,7 +113,7 @@ class DefinitionLinks(BaseModel):
     self: Link
     creator: Link
     last_run: Optional[Link]
-    last_successful_github_sync: Link
+    last_successful_github_sync: Optional[Link]
     web_edit: Link
 
 
@@ -341,7 +341,7 @@ class Definition(BaseModel):
     data_source_id: str
     created_at: str
     updated_at: str
-    last_successful_sync_at: str
+    last_successful_sync_at: Optional[str]
     last_saved_at: str
     github_link: Optional[str]
     links: DefinitionLinks = Field(alias="_links")
